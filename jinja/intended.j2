@@ -1,0 +1,98 @@
+## Golden Configuration Template (Cisco IOS-XE)
+## HCLTech NetOps - golden_config context
+## -------------------------------------------------------------
+{% if config_context.golden_config is defined %}
+{% set gc = config_context.golden_config %}
+{% if gc.banner_login is defined %}
+banner login ^C
+{{ gc.banner_login }}
+^C
+{% endif %}
+{% if gc.banner_motd is defined %}
+banner motd ^C
+{{ gc.banner_motd }}
+^C
+{% endif %}
+{% if gc.domain_name is defined %}
+ip domain name {{ gc.domain_name }}
+{% endif %}
+{% if gc.ssh_version is defined %}
+ip ssh version {{ gc.ssh_version }}
+{% endif %}
+{% if gc.hardening is defined %}
+{% set h = gc.hardening %}
+{% if h.clock_timezone is defined %}
+clock timezone {{ h.clock_timezone }}
+{% endif %}
+{% if h.errdisable_causes is defined %}
+{% for cause in h.errdisable_causes %}
+errdisable recovery cause {{ cause }}
+{% endfor %}
+{% endif %}
+{% if h.errdisable_recovery_interval is defined %}
+errdisable recovery interval {{ h.errdisable_recovery_interval }}
+{% endif %}
+{% if h.logging_server is defined %}
+logging host {{ h.logging_server }}
+{% endif %}
+{% if h.netops_secret is defined %}
+username netops privilege 15 secret 8 {{ h.netops_secret }}
+{% endif %}
+{% if h.ntp_source_interface is defined %}
+ntp source {{ h.ntp_source_interface }}
+{% endif %}
+{% if h.ntp_auth_key is defined and h.ntp_auth_secret is defined %}
+ntp authenticate
+ntp authentication-key {{ h.ntp_auth_key }} md5 {{ h.ntp_auth_secret }}
+{% endif %}
+{% if h.ntp_trusted_key is defined %}
+ntp trusted-key {{ h.ntp_trusted_key }}
+{% endif %}
+{% if h.ssh_source_interface is defined %}
+ip ssh source-interface {{ h.ssh_source_interface }}
+{% endif %}
+{% if h.snmp_group_name is defined %}
+snmp-server group {{ h.snmp_group_name }} v3 priv
+{% endif %}
+{# storm_control_level ({{ h.storm_control_level | default('') }}) is a per-interface value -> use it inside your interface template, e.g. storm-control broadcast level {{ h.storm_control_level }} #}
+{% endif %}
+{% if gc.restricted_subnets is defined %}
+{% set rs = gc.restricted_subnets %}
+{% if rs.ntp is defined %}
+ip access-list standard NTP-ACL
+{% for entry in rs.ntp %}
+{% set p = entry.split() %}
+{% if p | length == 2 %}
+  permit {{ p[0] }} {{ p[1] }}
+{% else %}
+  permit {{ p[0] }}
+{% endif %}
+{% endfor %}
+ntp access-group peer NTP-ACL
+{% endif %}
+{% if rs.snmp is defined %}
+ip access-list standard SNMP-ACL
+{% for entry in rs.snmp %}
+{% set p = entry.split() %}
+{% if p | length == 2 %}
+  permit {{ p[0] }} {{ p[1] }}
+{% else %}
+  permit {{ p[0] }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if rs.vty is defined %}
+ip access-list standard VTY-ACL
+{% for entry in rs.vty %}
+{% set p = entry.split() %}
+{% if p | length == 2 %}
+  permit {{ p[0] }} {{ p[1] }}
+{% else %}
+  permit {{ p[0] }}
+{% endif %}
+{% endfor %}
+line vty 0 15
+  access-class VTY-ACL in
+{% endif %}
+{% endif %}
+{% endif %}
