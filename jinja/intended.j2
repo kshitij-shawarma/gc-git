@@ -3,16 +3,6 @@
 ## -------------------------------------------------------------
 {% if config_context.golden_config is defined %}
 {% set gc = config_context.golden_config %}
-{% if gc.banner_login is defined %}
-banner login ^C
-{{ gc.banner_login }}
-^C
-{% endif %}
-{% if gc.banner_motd is defined %}
-banner motd ^C
-{{ gc.banner_motd }}
-^C
-{% endif %}
 {% if gc.domain_name is defined %}
 ip domain name {{ gc.domain_name }}
 {% endif %}
