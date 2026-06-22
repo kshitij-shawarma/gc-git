@@ -38,6 +38,13 @@ transport udp port 562
 {% if h.netops_secret is defined %}
 username netops privilege 15 secret 8 {{ h.netops_secret }}
 {% endif %}
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+service compress-config
+service call-home
 {% if h.ntp_source_interface is defined %}
 ntp source {{ h.ntp_source_interface }}
 {% endif %}
