@@ -90,8 +90,26 @@ ip access-list standard VTY-ACL
   permit {{ p[0] }}
 {% endif %}
 {% endfor %}
-line vty 0 15
-  access-class VTY-ACL in
+line vty 0 4
+ access-class VTY-RESTRICT in vrf-also
+ exec-timeout 5 0
+ authorization exec vty1
+ logging synchronous
+ login authentication vty1
+ transport input ssh
+ transport output none
+line vty 5 15
+ access-class VTY-RESTRICT in vrf-also
+ exec-timeout 5 0
+ logging synchronous
+ transport input ssh
+ transport output none
+line vty 16 98
+ transport input none
+ transport output none
+!
+exception crashinfo maximum files 2
+!
 {% endif %}
 {% endif %}
 {% endif %}
