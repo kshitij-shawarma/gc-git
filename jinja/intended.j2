@@ -51,9 +51,7 @@ ntp trusted-key {{ h.ntp_trusted_key }}
 {% if h.ssh_source_interface is defined %}
 ip ssh source-interface {{ h.ssh_source_interface }}
 {% endif %}
-{% if h.snmp_group_name is defined %}
-snmp-server group {{ h.snmp_group_name }} v3 priv
-{% endif %}
+snmp-server group 5^r3n3$s29T4u&t v3 priv read HCLview access SNMP-RESTRICT
 {# storm_control_level ({{ h.storm_control_level | default('') }}) is a per-interface value -> use it inside your interface template, e.g. storm-control broadcast level {{ h.storm_control_level }} #}
 {% endif %}
 {% if gc.restricted_subnets is defined %}
