@@ -1,6 +1,8 @@
 ## Golden Configuration Template (Cisco IOS-XE)
 ## HCLTech NetOps - golden_config context
 ## -------------------------------------------------------------
+
+
 {% if config_context.golden_config is defined %}
 {% set gc = config_context.golden_config %}
 {% if gc.domain_name is defined %}
@@ -22,9 +24,17 @@ errdisable recovery cause {{ cause }}
 {% if h.errdisable_recovery_interval is defined %}
 errdisable recovery interval {{ h.errdisable_recovery_interval }}
 {% endif %}
-{% if h.logging_server is defined %}
-logging host {{ h.logging_server }}
-{% endif %}
+logging host 10.150.30.23 
+logging host 10.108.129.45 
+logging host 10.98.10.226 
+logging host 10.112.114.10 
+logging host 10.98.10.245 
+logging host 10.98.10.246 
+logging host 10.150.19.86 
+logging host 10.150.68.5 
+logging host 10.153.2.49 
+logging host 10.137.186.113 
+transport udp port 562
 {% if h.netops_secret is defined %}
 username netops privilege 15 secret 8 {{ h.netops_secret }}
 {% endif %}
