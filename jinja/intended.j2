@@ -73,7 +73,7 @@ ip access-list standard NTP-ACL
   permit {{ p[0] }}
 {% endif %}
 {% endfor %}
-ntp server 10.150.4.56 key 14632
+ntp server 10.150.4.57 key 14632
 ntp access-group peer NTP-ACL
 {% endif %}
 {% if rs.snmp is defined %}
